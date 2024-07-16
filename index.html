@@ -1,97 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
+    <div class="container"></div>
     <script>
-        
-        function getComputerChoice(){
-            let computer =Math.floor (Math.random() * 3);
-            let compChoice = "";
-            if(computer == 0)
-            return compChoice = "rock";
-        else if (computer == 1)
-        return compChoice = "scissors";
-    else 
-    return compChoice = "paper";
-}
+      const container = document.querySelector(".container");
 
-function getHumanChoice(){
-    let human = prompt("Rock, paper, or scissor? Choose 1.");
-    return human;
-}
-  
-        
-        function playGame(){
+      const btnScissor = document.createElement("button");
+      btnScissor.textContent = "Scissors";
+      btnScissor.setAttribute("value", "scissors");
 
-            let humanScore = 0;
-            let computerScore = 0;
+      const btnRock = document.createElement("button");
+      btnRock.textContent = "Rock";
+      btnRock.setAttribute("value", "rock");
 
-        function playRound(humanChoice, computerChoice){
-         let HChoice = humanChoice.toLowerCase();
+      const btnPaper = document.createElement("button");
+      btnPaper.textContent = "Paper";
+      btnPaper.setAttribute("value", "paper");
 
-         if(HChoice == computerChoice){
-            console.log("It's a tie");
-            return 0;
-         }
-            
-       
-         if(HChoice == "rock" && computerChoice == "scissors"){
-            console.log("You win! Rock beats Scissors");
-            return 2;
-         }
-         else if (HChoice == "paper" && computerChoice == "rock"){
-           console.log("You win! Paper beats Rock");
-           return 2;
-         }
-         else if (HChoice == "scissors" && computerChoice == "paper"){
-           console.log("You win! Scissors beats Paper");
-            return 2;
-         }
+      const reset = document.createElement("button");
+      reset.textContent = "Reset";
 
-         if (computerChoice == "rock" && HChoice == "scissors"){
-           console.log("You lose! Rock beats Scissors");
-           return 1;
-         }
-         else if (computerChoice == "paper" && HChoice == "rock"){
-           console.log("You lose! Paper beats Rock");
-           return 1;
-         }
-         else if (computerChoice == "scissors" && HChoice == "paper"){
-           console.log("You lose! Scissors beats Paper");
-           return 1;
-                 }
-            }
+      container.appendChild(btnScissor);
+      container.appendChild(btnRock);
+      container.appendChild(btnPaper);
+      container.appendChild(reset);
 
-            for(let i = 1; i <= 5; i++){
-             let cc = getComputerChoice();
-             let hc = getHumanChoice();
-             let result = playRound(hc, cc);
-             
+      const result = document.createElement("div");
+      const score = document.createElement("p");
+      score.setAttribute("class", "score");
+      score.textContent = "Scores:";
 
-             if (result == 2){
-                humanScore += 1;
-             }else if (result == 1){
-                computerScore +=1;
-             }
-            }
-            
-            console.log("Scores:");
-            console.log("human: " + humanScore);
-            console.log("computer: " + computerScore);
+      let hscore = document.createElement("p");
+      hscore.setAttribute("class", "hscore");
+      hscore.textContent = "Human: ";
 
-            if(humanScore > computerScore){
-                console.log("You win!")
-            }else if (computerScore > humanScore){
-                console.log("Computer wins!");
-            }
+      let cscore = document.createElement("p");
+      cscore.setAttribute("class", "cscore");
+      cscore.textContent = "Computer: ";
+
+      let tie = document.createElement("p");
+      tie.setAttribute("class", "tie");
+      tie.textContent = "Tie: ";
+
+      const finalScore = document.createElement("h2");
+      finalScore.setAttribute("class", "finalScore");
+      finalScore.textContent = "";
+
+      const parag = document.createElement("p");
+      parag.setAttribute("class", "resultText");
+
+      result.appendChild(score);
+      result.appendChild(hscore);
+      result.appendChild(cscore);
+      result.appendChild(tie);
+      result.appendChild(finalScore);
+      result.appendChild(parag);
+      container.appendChild(result);
+
+      btnScissor.addEventListener("click", () => {
+        const value = btnScissor.value;
+        let cc = getComputerChoice();
+        playRound(value, cc);
+      });
+
+      btnRock.addEventListener("click", () => {
+        const value = btnRock.value;
+        let cc = getComputerChoice();
+        playRound(value, cc);
+      });
+
+      btnPaper.addEventListener("click", () => {
+        const value = btnPaper.value;
+        let cc = getComputerChoice();
+        playRound(value, cc);
+      });
+
+      reset.addEventListener("click", resetGame);
+
+      function getComputerChoice() {
+        let computer = Math.floor(Math.random() * 3);
+        let compChoice = "";
+        if (computer == 0) return (compChoice = "rock");
+        else if (computer == 1) return (compChoice = "scissors");
+        else return (compChoice = "paper");
+      }
+
+      function disableButtons() {
+        btnScissor.disabled = true;
+        btnPaper.disabled = true;
+        btnRock.disabled = true;
+      }
+
+      function resetGame() {
+        computerScore = 0;
+        humanScore = 0;
+        tieScore = 0;
+
+        hscore.textContent = "Human: ";
+        cscore.textContent = "Computer: ";
+        tie.textContent = "Tie: ";
+        finalScore.textContent = "";
+        parag.textContent = "";
+
+        btnScissor.disabled = false;
+        btnPaper.disabled = false;
+        btnRock.disabled = false;
+      }
+
+      let computerScore = 0;
+      let humanScore = 0;
+      let tieScore = 0;
+
+      function setUpdateScore(winner) {
+        if (winner === 2) {
+          humanScore++;
+          hscore.textContent = `Human : ${humanScore}`;
+        } else if (winner === 1) {
+          computerScore++;
+          cscore.textContent = `Computer: ${computerScore}`;
+        } else if (winner === 0) {
+          tieScore++;
+          tie.textContent = `Tie: ${tieScore}`;
         }
-        
-    playGame();
-       
+
+        if (humanScore === 5) {
+          finalScore.textContent = "You reached 5 wins first! You win!";
+          disableButtons();
+        } else if (computerScore == 5) {
+          finalScore.textContent =
+            "Computer reached 5 wins first! Computer Wins!";
+          disableButtons();
+        }
+      }
+
+      function playRound(humanChoice, computerChoice) {
+        let HChoice = humanChoice.toLowerCase();
+        let resultText = document.querySelector(".resultText");
+        if (HChoice == computerChoice) {
+          resultText.textContent = "It's a tie";
+          setUpdateScore(0);
+        }
+
+        if (HChoice == "rock" && computerChoice == "scissors") {
+          resultText.textContent = "You win! Rock beats Scissors";
+          setUpdateScore(2);
+        } else if (HChoice == "paper" && computerChoice == "rock") {
+          resultText.textContent = "You win! Paper beats Rock";
+          setUpdateScore(2);
+        } else if (HChoice == "scissors" && computerChoice == "paper") {
+          resultText.textContent = "You win! Scissors beats Paper";
+          setUpdateScore(2);
+        }
+
+        if (computerChoice == "rock" && HChoice == "scissors") {
+          resultText.textContent = "You lose! Rock beats Scissors";
+          setUpdateScore(1);
+        } else if (computerChoice == "paper" && HChoice == "rock") {
+          resultText.textContent = "You lose! Paper beats Rock";
+          setUpdateScore(1);
+        } else if (computerChoice == "scissors" && HChoice == "paper") {
+          resultText.textContent = "You lose! Scissors beats Paper";
+          setUpdateScore(1);
+        }
+      }
     </script>
-</body>
+  </body>
 </html>
